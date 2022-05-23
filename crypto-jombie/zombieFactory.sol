@@ -20,8 +20,15 @@ contract ZombieFactory {
 
   // SolidityPath-lesson01-ch06: 배열
   Zombie[] public zombies; // public한 동적 배열 선언
-  // SolidityPath-lesson01-ch07: 함수 선언 -> // SolidityPath-lesson01-ch09: public -> private
-  function _createZombie(string memory _name, uint _dna) private {
+
+  // SolidityPath-lesson02-ch02: 매핑과 주소
+  mapping (uint=>address) public zombieToOwner;
+  mapping (address=>uint) ownerZombieCount;
+
+  // SolidityPath-lesson01-ch07: 함수 선언
+  // -> SolidityPath-lesson01-ch09: public -> private
+  // -> SolidityPath-lesson02-ch09: private -> internal
+  function _createZombie(string memory _name, uint _dna) internal {
     // SolidityPath-lesson01-ch08: 구조체와 배열 활용
     zombies.push(Zombie({
       name: _name, 
@@ -30,6 +37,10 @@ contract ZombieFactory {
     // SolidityPath-lesson01-ch13-02: event 실행
     uint _id = zombies.length;
     emit NewZombie(_id, _name, _dna);
+
+    // SolidityPath-lesson02-ch03: msg.sender
+    zombieToOwner[_id] = msg.sender;
+    ownerZombieCount[msg.sender] += 1;
   }
 
   // SolidityPath-lesson01-ch10: 함수 활용
@@ -41,6 +52,8 @@ contract ZombieFactory {
 
   // SolidityPath-lesson01-ch11: 종합
   function createRandomZombie(string memory _name) public {
+    // SolidityPath-lesson02-ch04: Require
+    require(ownerZombieCount[msg.sender] == 0);
     uint _randDna = _generateRandomDna(_name);
     _createZombie(_name, _randDna);
   }
