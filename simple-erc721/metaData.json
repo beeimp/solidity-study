@@ -1,0 +1,19 @@
+{
+  "name": "BeeImp #1",
+  "description": "BeeImp is my Nickname. This mean Bee + Imp. so, this picture represents me.",
+  "image": "https://avatars.githubusercontent.com/u/49437702?v=4",
+  "attributes": [
+    {
+      "trait_type": "Background",
+      "value": "White"
+    },
+    {
+      "trait_type": "Head",
+      "value": "Imp"
+    },
+    {
+      "trait_type": "Body",
+      "value": "Bee"
+    }
+  ]
+}
