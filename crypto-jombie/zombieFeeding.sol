@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.14; //SolidityPath-lesson01-ch02-01: 솔리디티 버전 입력
+pragma solidity ^0.8.0; //SolidityPath-lesson01-ch02-01: 솔리디티 버전 입력
 
 // SolidityPath-lesson02-ch06: Import
 import "./ZombieFactory.sol";
@@ -26,10 +26,24 @@ interface KittyInterface {
 // SolidityPath-lesson02-ch05: 상속
 // -> SolidityPath-lesson02-ch13: 키티 유전자 - _species 추가
 contract ZombieFeeding is ZombieFactory {
-    // SolidityPath-lesson02-ch11: 인터페이스 활용
-    address ckAddress = 0x06012c8cf97BEaD5deAe237070F9587f8E7A266d; // `ckAddress`를 이용하여 여기에 kittyContract를 초기화
-    KittyInterface kittyContract = KittyInterface(ckAddress);
+    // SolidityPath-lesson03-ch01: 컨트랙트의 불변성 - 해당 줄 삭제
+    /*
+     * // SolidityPath-lesson02-ch11: 인터페이스 활용
+     * address ckAddress = 0x06012c8cf97BEaD5deAe237070F9587f8E7A266d; // `ckAddress`를 이용하여 여기에 kittyContract를 초기화
+     */
+    
+    // SolidityPath-lesson03-ch01: 컨트랙트의 불변성 - 선언만 
+    /*
+     * KittyInterface kittyContract = KittyInterface(ckAddress);
+     */
+    KittyInterface kittyContract;
 
+    // SolidityPath-lesson03-ch01: 컨트랙트의 불변성 - setKittyContractAddress 메소드 추가
+    // SolidityPath-lesson03-ch03: onlyOwner 함수 제어자
+    function setKittyContractAddress(address _address) external onlyOwner {
+        kittyContract = KittyInterface(_address);
+    }
+    
     // SolidityPath-lesson02-ch07: storage vs Memory
     function feedAndMultiply(
         uint256 _zombieId,

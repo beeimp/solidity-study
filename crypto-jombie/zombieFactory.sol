@@ -1,9 +1,12 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.14; //SolidityPath-lesson01-ch02-01: 솔리디티 버전 입력
 
+// SolidityPath-lesson03-ch02: 소유 가능한 컨트랙트 - import Ownable
+import "./Ownable.sol";
+
 // SolidityPath-lesson01-ch02-02: 컨트랙트 생성
-contract ZombieFactory {
+// SolidityPath-lesson03-ch02: 소유 가능한 컨트랙트 - Ownable 상속
+contract ZombieFactory is Ownable {
   // SolidityPath-lesson01-ch14-01: event 선언
   event NewZombie(uint zombieId, string name, uint dna);
 
