@@ -14,11 +14,16 @@ contract ZombieFactory is Ownable {
   uint dnaDigits = 16; // 16자리 uint의 DNA
   // SolidityPath-lesson01-ch04: 수학 연산
   uint dnaModulus = 10 ** dnaDigits;
+  // SolidityPath-lesson03-ch05: 시간 단위 (1)
+  uint cooldownTime = 1 days;
 
   // SolidityPath-lesson01-ch05: 구조체
+  // -> SolidityPath-lesson03-ch04: 가스(Gas) - 구조체 요소 추가
   struct Zombie {
     string name;
     uint dna;
+    uint32 level;
+    uint32 readyTime; // 유닉스 타임 - 일반적으로 32bit
   }
 
   // SolidityPath-lesson01-ch06: 배열
@@ -35,7 +40,9 @@ contract ZombieFactory is Ownable {
     // SolidityPath-lesson01-ch08: 구조체와 배열 활용
     zombies.push(Zombie({
       name: _name, 
-      dna: _dna
+      dna: _dna,
+      level: 1,
+      readyTime: uint32(block.timestamp + cooldownTime) // SolidityPath-lesson03-ch05: 시간 단위 (2) - now -> block.timestamp
     }));
     // SolidityPath-lesson01-ch13-02: event 실행
     uint _id = zombies.length;
