@@ -43,16 +43,29 @@ contract ZombieFeeding is ZombieFactory {
     function setKittyContractAddress(address _address) external onlyOwner {
         kittyContract = KittyInterface(_address);
     }
+
+    // SolidityPath-lesson03-ch06: 좀비 재사용 대기 시간 (1) - `_triggerCooldown` 함수 정의
+    function _triggerCooldown(Zombie storage _zombie) internal {
+        _zombie.readyTime = uint32(block.timestamp + cooldownTime);
+    }
+
+    // SolidityPath-lesson03-ch06: 좀비 재사용 대기 시간 (1) - `_isReady` 함수 정의
+    function _isReady(Zombie storage _zombie) internal view returns(bool) {
+        return (_zombie.readyTime <= block.timestamp);
+    }
     
     // SolidityPath-lesson02-ch07: storage vs Memory
+    // -> SolidityPath-lesson03-ch07: Public 함수 & 보안 (1) - public -> internal
     function feedAndMultiply(
         uint256 _zombieId,
         uint256 _targetDna,
         string memory _species
-    ) public {
+    ) internal {
         require(zombieToOwner[_zombieId] == msg.sender);
         Zombie storage _myZombie = zombies[_zombieId];
         // SolidityPath-lesson02-ch08: 좀비 DNA
+        // -> SolidityPath-lesson03-ch07: Public 함수 & 보안 (2) - `_isReady` 확인
+        require(_isReady(_myZombie));
         _targetDna %= dnaModulus;
         uint256 _newDna = (_myZombie.dna + _targetDna) * 2;
 
@@ -63,6 +76,8 @@ contract ZombieFeeding is ZombieFactory {
             _newDna = _newDna - (_newDna % 100) + 99;
         }
         _createZombie("NoName", _newDna);
+        // SolidityPath-lesson03-ch07: Public 함수 & 보안 (3) - `_triggerCooldown`을 호출하게
+        _triggerCooldown(_myZombie);
     }
 
     // SolidityPath-lesson02-ch12: 다수의 반환값 처리
